@@ -1,0 +1,6 @@
+main: teamlk.diablo3.Diablo3
+name: DiabloIII
+version: 1.0
+commands:
+    d3:
+        description: Diablo3 Commands
