@@ -20,14 +20,21 @@ public class KTrigger extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		List<String> tf = new ArrayList<String>();
 		tf.add("*전체 &b후후후후");
+		//전체말로 후후후후 라고 메시지
         tf.add("*정수저장 [정수.1번] "+RandomUtils.nextInt(10000));
+        //[정수.1번] 이라는 상자에다가 랜덤으로 0~10000중에 숫자를
+        //골라서 넣음
         tf.add("*전체 &a저장된 정수 : $정수.1번$");
+        //[정수.1번] 상자에 저장된 숫자를 전체말로 메시지.
         
         tf.add("*논리저장 [논리.1번] "+((Boolean)RandomUtils.nextBoolean()).toString());
+        //비슷하게, [논리.1번]에다가 true와 false를 랜덤하게 저장
         tf.add("*전체 &a저장된 논리 : $논리.1번$");
+        //논리.1번저장된걸 메시지
         
         tf.add("*문자저장 [문자.1번] 으암ㅇㄴㄻㄴㅇㄹ");
         tf.add("*전체 &a저장된 문자 : $문자.1번$");
+        //말 안해도 알듯.
         
         tf.add("*의문:만약 $정수.1번$ >= 5000");
         tf.add("*정수빼기 [정수.2번] $정수.1번$ 5000");
@@ -36,6 +43,7 @@ public class KTrigger extends JavaPlugin implements Listener {
         tf.add("*정수빼기 [정수.2번] 5000 $정수.1번$");
         tf.add("*전체 &4정수.1번 변수가 5000보다 $정수.2번$작습니다.");
         tf.add("*의문:끝");
+        //이건... 그냥 다음 화면을 보자.
         runFunction(tf);
 	}
 	
