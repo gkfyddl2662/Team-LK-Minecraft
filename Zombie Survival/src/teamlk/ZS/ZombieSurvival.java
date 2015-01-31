@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ZombieSurvival extends JavaPlugin implements Listener {
 	
-	public void onEnable()
+	public void onEnable() {
+		
+	}
 
 }
