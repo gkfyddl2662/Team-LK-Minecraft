@@ -18,7 +18,7 @@ public class ZombieSurvival extends JavaPlugin implements Listener, Runnable {
 	Integer intPlayingTime = 0;
 	
 	HashMap<Player, PlayerType> mapPlayer = new HashMap<Player, PlayerType>();
-	String main = "§c[ Lian Online ]";
+	String main = "§c[ Lian Online ] ";
 	public void onEnable() {
 		
 	}
@@ -29,7 +29,8 @@ public class ZombieSurvival extends JavaPlugin implements Listener, Runnable {
 			} else if(a[0].equalsIgnoreCase("중지")) {
 				
 			} else if(a[0].equalsIgnoreCase("시간")) {
-				s.sendMessage("[Zombie]");
+				s.sendMessage(main+" §f[ §cZombie Survival §a시간이 "+(Integer.valueOf(a[1])*60)+"분으로 조정되었습니다.");
+				intPlayingTime = Integer.valueOf(a[1])*60;
 			} else if(a[0].equalsIgnoreCase("시작")) {
 				
 			}
