@@ -48,6 +48,7 @@ public class ZombieStart extends Thread {
 				if(setted == false) {
 					ZombieTeams.setTeam(p,PlayerType.MAINZOMBIE);
 					p.sendMessage(ZombieSurvival.main+"§4당신은 숙주좀비 입니다.");
+					p.damage(1000.0);
 					setted = true;
 				}
 			}
