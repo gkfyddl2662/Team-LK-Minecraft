@@ -1,6 +1,10 @@
 package teamlk.ZS;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import teamlk.ZS.ZombieSurvival.PlayerType;
 
 public class ZombieStart extends Thread {
 	Integer mainZombie = 45;
@@ -30,9 +34,33 @@ public class ZombieStart extends Thread {
 		} else {
 			Integer a = ZombieGame.secPlaying;
 			Bukkit.broadcastMessage(ZombieSurvival.main+"§4숙주 좀비가 탄생했습니다.");
+			setRandomMainZombie(Bukkit.getOnlinePlayers());
 			ZombieGame obj1 = new ZombieGame();
 			obj1.start();
 			ZombieGame.secPlaying = a;
+		}
+	}
+	
+	void setRandomMainZombie(Player[] pl) {
+		Boolean setted = false;
+		for(Player p : pl) {
+			if(RandomUtils.nextInt(100) < 4) {
+				if(setted == false) {
+					ZombieTeams.setTeam(p,PlayerType.MAINZOMBIE);
+					p.sendMessage(ZombieSurvival.main+"§4당신은 숙주좀비 입니다.");
+					setted = true;
+				}
+			}
+		}
+		if (setted==false){
+			setRandomMainZombie(Bukkit.getOnlinePlayers());
+		} else {
+			for(Player p : pl) {
+				if (!ZombieTeams.team.containsKey(p)){
+					ZombieTeams.setTeam(p, PlayerType.HUMAN);
+					p.sendMessage(ZombieSurvival.main+"§a당신은 인간 입니다.");
+				}
+			}
 		}
 	}
 }
