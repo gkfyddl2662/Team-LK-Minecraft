@@ -14,23 +14,22 @@ public class ZombieSurvival extends JavaPlugin implements Listener, Runnable {
 		MAINZOMBIE, ZOMBIE, HUMAN
 	}
 	
-	Integer intDefaultSecond = 60*30; // 30분
-	Integer intPlayingTime = 0;
-	
 	HashMap<Player, PlayerType> mapPlayer = new HashMap<Player, PlayerType>();
-	String main = "§c[ Lian Online ] ";
+	public static String main = "§c[ Lian Online ] ";
 	public void onEnable() {
 		
 	}
 
 	public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
 			if(a[0].equalsIgnoreCase("시작")) {
-				
+				ZombieStart obj = new ZombieStart();
+				obj.start();
+				ZombieGame obj1 = new ZombieGame();
+				obj1.start();
 			} else if(a[0].equalsIgnoreCase("중지")) {
 				
 			} else if(a[0].equalsIgnoreCase("시간")) {
 				s.sendMessage(main+" §f[ §cZombie Survival §a시간이 "+(Integer.valueOf(a[1])*60)+"분으로 조정되었습니다.");
-				intPlayingTime = Integer.valueOf(a[1])*60;
 			} else if(a[0].equalsIgnoreCase("시작")) {
 				
 			}
@@ -39,7 +38,10 @@ public class ZombieSurvival extends JavaPlugin implements Listener, Runnable {
 	
 	@Override
 	public void run() {
-		
+		if (intPlayingTime == -1) {
+			getServer().
+		}
+		intPlayingTime--;
 	}
 
 }
