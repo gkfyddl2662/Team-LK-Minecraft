@@ -23,12 +23,16 @@ public class ZombieStart extends Thread {
 	
 	void sendMainZombie() throws InterruptedException {
 		Thread.sleep(1000);
-		Bukkit.broadcastMessage(ZombieSurvival.main+"§e숙주 탄생까지 "+mainZombie+"초 남았습니다.");
-		mainZombie--;
-	}
-	
-	void setMainZombieRandom() {
-		Bukkit.broadcastMessage(ZombieSurvival.main+"§4숙주 좀비가 탄생했습니다.");
-		
+		if (mainZombie > 0) {
+			Bukkit.broadcastMessage(ZombieSurvival.main+"§e숙주 탄생까지 "+mainZombie+"초 남았습니다.");
+			mainZombie--;
+			sendMainZombie();
+		} else {
+			Integer a = ZombieGame.secPlaying;
+			Bukkit.broadcastMessage(ZombieSurvival.main+"§4숙주 좀비가 탄생했습니다.");
+			ZombieGame obj1 = new ZombieGame();
+			obj1.start();
+			ZombieGame.secPlaying = a;
+		}
 	}
 }

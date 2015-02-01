@@ -1,0 +1,7 @@
+name: ZombieSurvival
+main: teamlk.ZS.ZombieSurvival
+version: 1.0
+commands:
+    좀비:
+        description: AHHHH
+        usage: /좀비
