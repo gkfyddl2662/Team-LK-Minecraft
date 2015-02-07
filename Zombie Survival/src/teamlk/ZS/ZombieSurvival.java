@@ -15,18 +15,22 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 		MAINZOMBIE, ZOMBIE, HUMAN
 	}
 	
+	public ZombieGame zg;
+	public ZombieStart zs;
+	
 	HashMap<Player, PlayerType> mapPlayer = new HashMap<Player, PlayerType>();
-	public static String main = "§c[ Lian Online ] ";
+	public String main = "§c[ Lian Online ] ";
 	public void onEnable() {
-		
+		zg = new ZombieGame(this);
+		zs = new ZombieStart(this);
+		getServer().getPluginManager().registerEvents(zg, this);
 	}
-
+	
 	public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
 			if(a[0].equalsIgnoreCase("시작")) {
-				if(ZombieGame.secPlaying > 0) {
-					if(ZombieGame.runned == false) {
-						ZombieStart obj = new ZombieStart();
-						obj.start();
+				if(zg.Time > 0) {
+					if(zg.isRunning() == false) {
+						zs.GameStart();
 					} else
 						s.sendMessage(main+"§c이미 게임이 시작되어 있습니다.");
 				} else {
@@ -34,17 +38,17 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 				}
 				return true;
 			} else if(a[0].equalsIgnoreCase("중지")) {
-				if(ZombieGame.runned == true) {
-					ZombieGame.runned = false;
-					ZombieGame.mapFreezing.clear();
-					Bukkit.broadcastMessage(ZombieSurvival.main+"§e게임이 중단되었습니다.");
+				if(zg.isRunning() == true || zs.isRunning() == true) {
+					zg.stopTimer();
+					zg.mapFreezing.clear();
+					Bukkit.broadcastMessage(main+"§e게임이 중단되었습니다.");
 				} else {
 					s.sendMessage(main+"§c게임이 시작되어있지 않습니다..");
 				}
 				return true;
 			} else if(a[0].equalsIgnoreCase("시간")) {
 				s.sendMessage(main+"§f[ §cZombie Survival §f] §a시간이 "+Integer.valueOf(a[1])+"분으로 조정되었습니다.");
-				ZombieGame.secPlaying = Integer.valueOf(a[1])*60;
+				zg.Time = Integer.valueOf(a[1])*60;
 				return true;
 			}
 		return false;

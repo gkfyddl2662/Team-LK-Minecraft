@@ -12,37 +12,50 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import teamlk.ZS.ZombieSurvival.PlayerType;
 
-public class ZombieGame extends Thread implements Listener {
+public class ZombieGame implements Listener {
+	
+	private ZombieSurvival zs;
+	public HashMap<Player,Boolean> mapFreezing = new HashMap<Player,Boolean>();
+	private TZombieTimer stimer = new TZombieTimer();
+	public Integer Time = 0;
+	public ZombieGame(ZombieSurvival ZS) {
+		zs = ZS;
+	}
+	
+	public void GameStart() {
+		stimer.StartTimer(Time, true);
+	}
+	
+	public Boolean isRunning() {
+		return stimer.GetTimerRunning();
+	}
+	
+	public void stopTimer() {
+		stimer.EndTimer();
+	}
+	
+	public final class TZombieTimer extends ZombieTimer {
 
-	public static int secPlaying = 0;
-	public static HashMap<Player,Boolean> mapFreezing = new HashMap<Player,Boolean>();
-	public static Boolean runned = false;
-	public void run() {
-		try {
-			running();
-			runned = true;
-		} catch (InterruptedException e) {
+		@Override
+		public void EventStartTimer() {
+			
+		}
+
+		@Override
+		public void EventRunningTimer(int paramInt) {
+			if (GetCount() % 60 == 0) {
+				Bukkit.broadcastMessage(zs.main+"게임 종료까지 " +(GetCount()/60)+"분 남았습니다.");
+			}
+		}
+
+		@Override
+		public void EventEndTimer() {
+
 		}
 	}
-	
-	void running() throws InterruptedException {
-		Thread.sleep(1000);
-		if(secPlaying % 60 == 0) {
-			if (secPlaying == 0) {
-				runned = false;
-				mapFreezing.clear();
-				Bukkit.broadcastMessage(ZombieSurvival.main+"§e인간이 승리하였습니다.");
-				return;
-			} else
-			Bukkit.broadcastMessage(ZombieSurvival.main+"§e게임 종료까지 "+secPlaying/60+"분 남았습니다.");
-		}
-		secPlaying--;
-		running();
-	}
-	
 	@EventHandler
 	public void hitting(EntityDamageByEntityEvent e) {
-		if(runned == false) {
+		if(stimer.GetTimerRunning() == false) {
 			e.setCancelled(true);
 		}
 		if(e.getEntity() instanceof Player) {
@@ -67,20 +80,22 @@ public class ZombieGame extends Thread implements Listener {
 		}
 	}
 	
+	@EventHandler
 	public void join(PlayerJoinEvent e) {
-		if(runned == true) {
+		if(stimer.GetTimerRunning() == true) {
 			mapFreezing.put(e.getPlayer(), true);
 		}
 	}
 	
 	@EventHandler
 	public void die(PlayerDeathEvent e) {
+		if(ZombieTeams.team.get(e.getEntity()) == PlayerType.MAINZOMBIE) return;
 		ZombieTeams.setTeam(e.getEntity(), PlayerType.ZOMBIE);
-		e.getEntity().sendMessage(ZombieSurvival.main+"§c당신은 감염되어 좀비가 되었습니다.");
+		e.getEntity().sendMessage(zs.main+"§c당신은 감염되어 좀비가 되었습니다.");
 		if(!ZombieTeams.team.containsValue(PlayerType.HUMAN)) {
-			runned = false;
+			stimer.EndTimer();
 			mapFreezing.clear();
-			Bukkit.broadcastMessage(ZombieSurvival.main+"§e좀비가 승리하였습니다.");
+			Bukkit.broadcastMessage(zs.main+"§e좀비가 승리하였습니다.");
 		}
 	}
 	
