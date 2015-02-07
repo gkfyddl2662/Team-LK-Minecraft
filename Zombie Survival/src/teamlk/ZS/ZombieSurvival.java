@@ -52,7 +52,7 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 				zg.Time = Integer.valueOf(a[1])*60;
 				return true;
 			} else if (a[0].equalsIgnoreCase("ÆÀ")) {
-				zg.
+				
 			}
 		return false;
 	}
