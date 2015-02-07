@@ -80,7 +80,7 @@ public class SkillSlots extends JavaPlugin implements Listener {
 			ItemMeta im = is.getItemMeta();
 			im.setDisplayName(display);
 			im.setLore(lore2);
-			is.setItemMeta(im);
+			is.setItemMeta(im); 
 			skillSlots.setItem(i,is);
 		}
 	}
