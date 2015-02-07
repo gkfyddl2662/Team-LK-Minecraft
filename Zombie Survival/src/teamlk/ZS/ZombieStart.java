@@ -25,6 +25,7 @@ public class ZombieStart {
 	public final class TZombieTimer extends ZombieTimer {
 		public void EventRunningTimer(int count) {
             switch (count) {
+            case 1:case 2:case 0: break;
             case 3:
             	Bukkit.broadcastMessage(zs.main+"¡×f-----------------------------------");
             	Bukkit.broadcastMessage(zs.main+"¡×f[ Zombie Survival ]");

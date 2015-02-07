@@ -1,0 +1,7 @@
+name: SkillSlots
+main: teamlk.skillslots.SkillSlots
+version: 1.0
+commands:
+    sss:
+        description: AHHHH
+        usage: /sss

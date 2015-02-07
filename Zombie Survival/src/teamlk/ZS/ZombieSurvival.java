@@ -29,7 +29,7 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 	public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
 			if(a[0].equalsIgnoreCase("시작")) {
 				if(zg.Time > 0) {
-					if(zg.isRunning() == false) {
+					if(zg.isRunning() == false & zs.isRunning() == false) {
 						zs.GameStart();
 					} else
 						s.sendMessage(main+"§c이미 게임이 시작되어 있습니다.");
@@ -40,6 +40,7 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 			} else if(a[0].equalsIgnoreCase("중지")) {
 				if(zg.isRunning() == true || zs.isRunning() == true) {
 					zg.stopTimer();
+					zs.stopTimer();
 					zg.mapFreezing.clear();
 					Bukkit.broadcastMessage(main+"§e게임이 중단되었습니다.");
 				} else {
@@ -47,9 +48,11 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 				}
 				return true;
 			} else if(a[0].equalsIgnoreCase("시간")) {
-				s.sendMessage(main+"§f[ §cZombie Survival §f] §a시간이 "+Integer.valueOf(a[1])+"분으로 조정되었습니다.");
+				s.sendMessage(main+"§a시간이 "+Integer.valueOf(a[1])+"분으로 조정되었습니다.");
 				zg.Time = Integer.valueOf(a[1])*60;
 				return true;
+			} else if (a[0].equalsIgnoreCase("팀")) {
+				zg.
 			}
 		return false;
 	}

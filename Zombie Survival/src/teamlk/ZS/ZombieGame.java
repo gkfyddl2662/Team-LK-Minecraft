@@ -2,6 +2,7 @@ package teamlk.ZS;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,7 +45,13 @@ public class ZombieGame implements Listener {
 		@Override
 		public void EventRunningTimer(int paramInt) {
 			if (GetCount() % 60 == 0) {
-				Bukkit.broadcastMessage(zs.main+"게임 종료까지 " +(GetCount()/60)+"분 남았습니다.");
+				if(GetCount() == 0){
+					stimer.EndTimer();
+					mapFreezing.clear();
+					Bukkit.broadcastMessage(zs.main+"인간이 승리하였습니다!");
+					gameend();
+				}else
+					Bukkit.broadcastMessage(zs.main+"게임 종료까지 " +(GetCount()/60)+"분 남았습니다.");
 			}
 		}
 
@@ -89,6 +96,7 @@ public class ZombieGame implements Listener {
 	
 	@EventHandler
 	public void die(PlayerDeathEvent e) {
+		if(!zs.zs.isRunning() || !zs.zg.isRunning()) return;
 		if(ZombieTeams.team.get(e.getEntity()) == PlayerType.MAINZOMBIE) return;
 		ZombieTeams.setTeam(e.getEntity(), PlayerType.ZOMBIE);
 		e.getEntity().sendMessage(zs.main+"§c당신은 감염되어 좀비가 되었습니다.");
@@ -96,7 +104,13 @@ public class ZombieGame implements Listener {
 			stimer.EndTimer();
 			mapFreezing.clear();
 			Bukkit.broadcastMessage(zs.main+"§e좀비가 승리하였습니다.");
+			gameend();
 		}
+	}
+
+	public void gameend() {
+		Player p = zs.getServer().getOnlinePlayers()[RandomUtils.nextInt(zs.getServer().getOnlinePlayers().length)];
+		p.chat("/vt run Game:4");
 	}
 	
 }
