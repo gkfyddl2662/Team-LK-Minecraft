@@ -17,12 +17,14 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 	
 	public ZombieGame zg;
 	public ZombieStart zs;
+	public ZombieTeams zt;
 	
 	HashMap<Player, PlayerType> mapPlayer = new HashMap<Player, PlayerType>();
 	public String main = "¡×c[ Lian Online ] ";
 	public void onEnable() {
 		zg = new ZombieGame(this);
 		zs = new ZombieStart(this);
+		zt = new ZombieTeams(this);
 		getServer().getPluginManager().registerEvents(zg, this);
 	}
 	
@@ -52,7 +54,10 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 				zg.Time = Integer.valueOf(a[1])*60;
 				return true;
 			} else if (a[0].equalsIgnoreCase("ÆÀ")) {
-				
+				Player p = (Player)s;
+				zt.setTeam(p, PlayerType.values()[Integer.valueOf(a[1])]);
+				p.sendMessage(main+"");
+				return true;
 			}
 		return false;
 	}

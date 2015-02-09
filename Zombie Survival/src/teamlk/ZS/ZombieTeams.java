@@ -8,9 +8,14 @@ import teamlk.ZS.ZombieSurvival.PlayerType;
 
 public class ZombieTeams {
 	
-	static HashMap<Player, PlayerType> team = new HashMap<Player, PlayerType>();
+	HashMap<Player, PlayerType> team = new HashMap<Player, PlayerType>();
+	ZombieSurvival zs;
 
-	public static void setTeam(Player p, PlayerType mainzombie) {
+	public ZombieTeams(ZombieSurvival zombieSurvival) {
+		zs = zombieSurvival;
+	}
+
+	public void setTeam(Player p, PlayerType mainzombie) {
 		team.put(p,mainzombie);
 	}
 
