@@ -22,6 +22,10 @@ public class ZombieStart {
 		stimer.EndTimer();
 	}
 	
+	public void Skip() {
+		stimer.SetCount(46);
+	}
+	
 	public final class TZombieTimer extends ZombieTimer {
 		public void EventRunningTimer(int count) {
             switch (count) {
@@ -39,6 +43,7 @@ public class ZombieStart {
         		Bukkit.broadcastMessage(zs.main+"§e숙주 탄생까지 "+(48-count)+"초 남았습니다.");
             	else {
             		zs.zg.GameStart();
+            		Bukkit.broadcastMessage(zs.main+"§4숙주가 탄생하였습니다.");
         		}
             }
 		}

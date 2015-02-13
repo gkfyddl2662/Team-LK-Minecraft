@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +25,9 @@ public class ZombieGame implements Listener {
 	
 	public void GameStart() {
 		stimer.StartTimer(Time, true);
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			zs.zt.setTeam(p, PlayerType.HUMAN);
+		}
 	}
 	
 	public Boolean isRunning() {
@@ -45,30 +47,12 @@ public class ZombieGame implements Listener {
 
 		@Override
 		public void EventRunningTimer(int paramInt) {
-			for(Player p : Bukkit.getOnlinePlayers()) {
-				if(zs.zt.team.containsKey(p)){
-					if(zs.zt.team.get(p) == PlayerType.HUMAN) {
-						p.setDisplayName(ChatColor.BLUE+p.getDisplayName());
-						p.setPlayerListName(ChatColor.BLUE+p.getDisplayName());
-					} else if(zs.zt.team.get(p) == PlayerType.ZOMBIE) {
-						p.setDisplayName(ChatColor.RED+p.getDisplayName());
-						p.setPlayerListName(ChatColor.RED+p.getDisplayName());
-					} else if(zs.zt.team.get(p) == PlayerType.MAINZOMBIE) {
-						p.setDisplayName(ChatColor.DARK_RED+p.getDisplayName());
-						p.setPlayerListName(ChatColor.DARK_RED+p.getDisplayName());
-					}
-				} else {
-					p.setDisplayName(ChatColor.WHITE+p.getDisplayName());
-					p.setPlayerListName(ChatColor.WHITE+p.getDisplayName());
-				}
-			}
-			//Bukkit.broadcastMessage(zs.main+"디버깅 ZombieGame.class : "+GetCount());
+			zs.zt.setNicknamePlayers();
 			if (GetCount() % 60 == 0) {
 				if(GetCount() == 0){
-					stimer.EndTimer();
-					mapFreezing.clear();
+					clearAll();
 					Bukkit.broadcastMessage(zs.main+"인간이 승리하였습니다!");
-					gameend();
+					stopTimer();
 				}else
 					Bukkit.broadcastMessage(zs.main+"게임 종료까지 " +(GetCount()/60)+"분 남았습니다.");
 			}
@@ -81,28 +65,24 @@ public class ZombieGame implements Listener {
 	}
 	@EventHandler
 	public void hitting(EntityDamageByEntityEvent e) {
-		if(stimer.GetTimerRunning() == false) {
+		if(!isRunning()) {
 			e.setCancelled(true);
-		}
-		if(e.getEntity() instanceof Player) {
-			if(mapFreezing.containsKey((Player)e.getEntity())) {
-				if(mapFreezing.get((Player)e.getEntity()) == true) {
-					e.setCancelled(true);
-				}
-			}
+			return;
 		}
 		if(e.getDamager() instanceof Player) {
 			if(e.getEntity() instanceof Player) {
 				Player damager = (Player)e.getDamager();
 				Player target = (Player)e.getEntity();
-				if(zs.zt.team.get(damager) == zs.zt.team.get(target) ||
-						(zs.zt.team.get(damager) == PlayerType.MAINZOMBIE &&
-						 zs.zt.team.get(target) == PlayerType.ZOMBIE ||
-						 (zs.zt.team.get(damager) == PlayerType.ZOMBIE &&
-						 zs.zt.team.get(target) == PlayerType.MAINZOMBIE))) {
-					e.setCancelled(true);
+				if(zs.zt.team.containsKey(damager)) {
+					if(zs.zt.team.containsKey(target)) {
+						if (zs.zt.isTeam(damager, target)) {
+							e.setCancelled(true);
+							return;
+						}
+					}
 				}
 			}
+			e.setCancelled(false);
 		}
 	}
 	
@@ -115,18 +95,24 @@ public class ZombieGame implements Listener {
 	
 	@EventHandler
 	public void die(PlayerDeathEvent e) {
-		if(!zs.zs.isRunning() || !zs.zg.isRunning()) return;
+		if(!zs.zs.isRunning() && !zs.zg.isRunning()) return;
 		if(zs.zt.team.get(e.getEntity()) == PlayerType.MAINZOMBIE) return;
 		zs.zt.setTeam(e.getEntity(), PlayerType.ZOMBIE);
-		e.getEntity().sendMessage(zs.main+"§c당신은 감염되어 좀비가 되었습니다.");
+		zs.zt.setNicknamePlayers();
 		if(!zs.zt.team.containsValue(PlayerType.HUMAN)) {
-			stimer.EndTimer();
-			mapFreezing.clear();
+			clearAll();
 			Bukkit.broadcastMessage(zs.main+"§e좀비가 승리하였습니다.");
-			gameend();
 		}
 	}
 
+	public void clearAll() {
+		mapFreezing.clear();
+		zs.zt.team.clear();
+		zs.zt.setNicknamePlayers();
+		stimer.EndTimer();
+		gameend();
+	}
+	
 	public void gameend() {
 		Player p = zs.getServer().getOnlinePlayers()[RandomUtils.nextInt(zs.getServer().getOnlinePlayers().length)];
 		p.chat("/vt run Game:4");

@@ -28,7 +28,13 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(zg, this);
 	}
 	
+	public void onDisable() {
+		zg.stopTimer();
+		zs.stopTimer();
+	}
+	
 	public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
+		if(!s.isOp())return true;
 			if(a[0].equalsIgnoreCase("시작")) {
 				if(zg.Time > 0) {
 					if(zg.isRunning() == false & zs.isRunning() == false) {
@@ -44,6 +50,8 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 					zg.stopTimer();
 					zs.stopTimer();
 					zg.mapFreezing.clear();
+					zt.team.clear();
+					zt.setNicknamePlayers();
 					Bukkit.broadcastMessage(main+"§e게임이 중단되었습니다.");
 				} else {
 					s.sendMessage(main+"§c게임이 시작되어있지 않습니다..");
@@ -55,8 +63,17 @@ public class ZombieSurvival extends JavaPlugin implements Listener {
 				return true;
 			} else if (a[0].equalsIgnoreCase("팀")) {
 				Player p = (Player)s;
-				zt.setTeam(p, PlayerType.values()[Integer.valueOf(a[1])]);
-				p.sendMessage(main+"");
+				try {
+					Player target = getServer().getPlayer(a[2]);
+					zt.setTeam(target, PlayerType.values()[Integer.valueOf(a[1])]);
+					p.sendMessage(main+target.getName()+"님의 팀이 변경되었습니다.");
+					target.sendMessage(main+"팀이 변경되었습니다.");
+				} catch(Exception e) {
+					p.sendMessage("플레이어를 찾을 수 없습니다.");
+				}
+				return true;
+			} else if (a[0].equalsIgnoreCase("스킵")) {
+				zs.Skip();
 				return true;
 			}
 		return false;
