@@ -63,8 +63,9 @@ public class ZombieGame implements Listener {
 
 		}
 	}
-	@EventHandler
+	//@EventHandler
 	public void hitting(EntityDamageByEntityEvent e) {
+		if(e.getDamager() instanceof Player)return;
 		if(!isRunning()) {
 			e.setCancelled(true);
 			return;

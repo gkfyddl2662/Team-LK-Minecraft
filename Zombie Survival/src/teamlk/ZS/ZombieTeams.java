@@ -2,6 +2,7 @@ package teamlk.ZS;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -35,13 +36,13 @@ public class ZombieTeams {
 		if(zs.zt.team.containsKey(p)){
 			if(zs.zt.team.get(p) == PlayerType.HUMAN) {
 				p.setDisplayName(ChatColor.BLUE+name+ChatColor.RESET);
-				p.setPlayerListName(ChatColor.BLUE+name+ChatColor.RESET);
+				p.setPlayerListName(ChatColor.BLUE+name);
 			} else if(zs.zt.team.get(p) == PlayerType.ZOMBIE) {
 				p.setDisplayName(ChatColor.RED+name+ChatColor.RESET);
-				p.setPlayerListName(ChatColor.RED+name+ChatColor.RESET);
+				p.setPlayerListName(ChatColor.RED+name);
 			} else if(zs.zt.team.get(p) == PlayerType.MAINZOMBIE) {
 				p.setDisplayName(ChatColor.DARK_RED+name+ChatColor.RESET);
-				p.setPlayerListName(ChatColor.DARK_RED+name+ChatColor.RESET);
+				p.setPlayerListName(ChatColor.DARK_RED+name);
 			}
 		} else {
 			p.setDisplayName(ChatColor.WHITE+name);
@@ -50,7 +51,7 @@ public class ZombieTeams {
 	}
 	
 	public void setNicknamePlayers() {
-		/*for(Player p : Bukkit.getOnlinePlayers()) {
+		for(Player p : Bukkit.getOnlinePlayers()) {
 			String name = p.getName().toString();
 			if(p.getName().length() > 15) {
 				name = p.getName().substring(0, 15);
@@ -70,7 +71,7 @@ public class ZombieTeams {
 				p.setDisplayName(ChatColor.WHITE+name);
 				p.setPlayerListName(ChatColor.WHITE+name);
 			}
-		}*/
+		}
 	}
 
 }
